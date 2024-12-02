@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { nanoid } from "nanoid"
 import urlExist from "url-exist"
+import { AppModels } from "../model/AppModels";
 
 export class AppServices {
 
@@ -24,6 +25,17 @@ export class AppServices {
             console.log(`[AppServices.urlValidate]: ${error}`)
             throw new Error('Internal server error')
         }
+    }
+
+    static redirectToOriginalLink = async (req: Request, res: Response) => {
+        
+        const {id} = req.params
+
+        console.log(id)
+
+        const originalLink = await AppModels.findByID(id)
+
+        originalLink ? res.redirect(originalLink) : res.status
     }
 
 };

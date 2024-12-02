@@ -3,17 +3,18 @@ import { prisma } from '../../prisma/prismaClient'
 export class AppModels {
 
     static findByID = async (id: string) => {
+
         try {
             const existingID = await prisma.short_urls.findUnique({
                 where: {
                     id: id
                 },
                 select: {
-                    id: true
+                    original_link: true
                 }
             })
 
-            return !!existingID
+            return existingID ? existingID.original_link : false
         } catch (error) {
             console.log(`[AppModels.findByID]: Error to find id: ${id}`)
             throw new Error('Internal server error!')
