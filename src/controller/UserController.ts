@@ -12,10 +12,12 @@ export class UserController {
             const existingOriginalLink = await AppModels.findByOriginalLink(originalLink)
 
             if (existingOriginalLink) {
-                return res.status(200).json({ shorURL: `${process.env.SHORT_URL_BASE}/${existingOriginalLink.id}` })
-            }
+                res.status(200).json({ shorURL: `${process.env.SHORT_URL_BASE}/${existingOriginalLink.id}` })
+                return
+            } 
 
             let id = '';
+
             let existingID: boolean = true;
 
             do {
@@ -25,7 +27,7 @@ export class UserController {
 
             await UserModels.addShorURL(id, originalLink);
 
-            return res.status(201).json({
+            res.status(201).json({
                 message: 'Short URL created successfully!',
                 shortURL: `${process.env.SHORT_URL_BASE}/${id}`
             });
